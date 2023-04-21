@@ -1,7 +1,7 @@
 require_relative "boot"
 
 require "rails/all"
-require_relative '../lib/middleware/user_authorizer'
+require_relative '../lib/middleware/user_authorization_middleware'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -21,6 +21,6 @@ module Middleware
     # config.eager_load_paths << Rails.root.join("extras")
 
     # devise middleware
-    config.middleware.insert_after Warden::Manager, UserAuthorizer
+    config.middleware.insert_after Warden::Manager, UserAuthorizationMiddleware
   end
 end

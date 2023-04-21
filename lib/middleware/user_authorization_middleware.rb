@@ -1,4 +1,4 @@
-class UserAuthorizer
+class UserAuthorizationMiddleware
   def initialize(app)
     @app = app
   end
