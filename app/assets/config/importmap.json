@@ -1,8 +1,0 @@
-{
-    "imports": {
-        "react": "/node_modules/react/umd/react.production.min.js",
-        "react-dom": "/node_modules/react-dom/umd/react-dom.production.min.js",
-        "graphiql": "/node_modules/graphiql/graphiql.min.js",
-        "graphiql.css": "/node_modules/graphiql/graphiql.min.css"
-    }
-}
