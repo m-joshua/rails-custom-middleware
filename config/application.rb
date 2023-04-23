@@ -2,6 +2,7 @@ require_relative "boot"
 
 require "rails/all"
 require_relative '../lib/middleware/user_authorization_middleware'
+require_relative '../lib/middleware/graphql_authorization_middleware'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -22,5 +23,6 @@ module Middleware
 
     # devise middleware
     config.middleware.insert_after Warden::Manager, UserAuthorizationMiddleware
+    config.middleware.use GraphqlAuthorizationMiddleware
   end
 end
