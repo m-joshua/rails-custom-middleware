@@ -5,6 +5,5 @@ class HomeController < ApplicationController
   end
 
   def about
-    authorize :home, :about?
   end
 end
