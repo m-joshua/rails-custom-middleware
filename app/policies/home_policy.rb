@@ -7,6 +7,6 @@ class HomePolicy < ApplicationPolicy
   end
 
   def about?
-    false
+    @user.is_admin?
   end
 end
