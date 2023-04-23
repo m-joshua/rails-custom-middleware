@@ -12,6 +12,9 @@
 
     <body>
         <%= render "layouts/alerts" %>
+        <% if current_user.present? %>
+            <%= button_to "logout", destroy_user_session_path, method: :delete  %>
+        <% end %>
         <%= yield %>
     </body>
 </html>

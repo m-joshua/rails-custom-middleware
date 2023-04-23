@@ -3,12 +3,14 @@ require 'pundit'
 class UserAuthorizationMiddleware
   include Pundit::Authorization
 
+  class PolicyNotDefined < StandardError; end
+
   def initialize(app)
     @app = app
   end
 
   def call(env)
-    @request = Rack::Request.new env
+    @request = ActionDispatch::Request.new(env)
     controller, action = action_info
     policy = initialize_policy(controller)
 
@@ -16,7 +18,7 @@ class UserAuthorizationMiddleware
     return respond_unauthorized if !policy.public_send(action)
 
     respond_normal
-  rescue NameError => e
+  rescue PolicyNotDefined
     respond_normal
   end
 
@@ -27,13 +29,15 @@ class UserAuthorizationMiddleware
   end
 
   def action_info
-    route = Rails.application.routes.recognize_path(@request.env["PATH_INFO"])
+    route = Rails.application.routes.recognize_path(@request.path, method: @request.request_method)
     [route[:controller], "#{route[:action]}?"]
   end
 
   def initialize_policy(controller)
-    policy = "#{controller.camelize}Policy".constantize
-    policy.new(current_user, nil)
+    policy = "#{controller.camelize}Policy"
+    raise PolicyNotDefined, "No Policy class defined" if !Object.const_defined?(policy)
+
+    policy.constantize.new(current_user, nil)
   end
 
   def respond_normal
