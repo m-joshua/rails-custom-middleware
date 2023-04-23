@@ -72,3 +72,8 @@ group :test do
 end
 
 gem "devise", "~> 4.9"
+
+gem "pundit", "~> 2.3"
+
+gem "graphql", "~> 2.0"
+gem "graphiql-rails", "~> 1.9"
