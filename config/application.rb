@@ -21,6 +21,6 @@ module Middleware
     # config.eager_load_paths << Rails.root.join("extras")
 
     # devise middleware
-    config.middleware.insert_after Warden::Manager, UserAuthorizationMiddleware
+    # config.middleware.insert_after Warden::Manager, UserAuthorizationMiddleware
   end
 end
