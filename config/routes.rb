@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   end
   post "/graphql", to: "graphql#execute"
 
+  resources :post, only: :edit
   devise_for :users
   root "home#index"
   get "/about" => "home#about"
