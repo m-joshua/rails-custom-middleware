@@ -4,3 +4,5 @@
 //= link_tree ../../../vendor/javascript .js
 //= link graphiql/rails/application.css
 //= link graphiql/rails/application.js
+//= link active_admin/base
+
