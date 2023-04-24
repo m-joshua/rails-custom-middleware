@@ -8,13 +8,13 @@ class ActiveAdminAuthorizationMiddleware
     return respond_normal if !@request.path.start_with?("/admin") # skip non-admin routes
 
     params = setup_params
-    controller = params[:controller].split("/").map(&:camelize).join("::")
+    controller = params[:controller].split("/").map(&:camelize).map(&:singularize).join("::")
     action = "#{params[:action]}?"
 
     policy = "#{controller}Policy"
     return respond_normal if !Object.const_defined?(policy)
 
-    policy = policy.constantize.new(current_user, params)
+    policy = policy.constantize.new(current_admin_user, params)
     return respond_normal if !policy.respond_to?(action)
     return respond_unauthorized if !policy.public_send(action)
 
@@ -23,7 +23,7 @@ class ActiveAdminAuthorizationMiddleware
 
   private
 
-  def current_user
+  def current_admin_user
     @request.env['warden'].user(:admin_user) # current_admin_user
   end
 
