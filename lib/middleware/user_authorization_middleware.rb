@@ -1,20 +1,18 @@
-require 'pundit'
-
 class UserAuthorizationMiddleware
-  include Pundit::Authorization
-
   def initialize(app)
     @app = app
   end
 
   def call(env)
     @request = ActionDispatch::Request.new(env)
-    controller, action = action_info
+    params = setup_params
+    controller = params[:controller]
+    action = "#{params[:action]}?"
 
     policy = "#{controller.camelize}Policy"
     return respond_normal if !Object.const_defined?(policy)
 
-    policy = policy.constantize.new(current_user, @request.params)
+    policy = policy.constantize.new(current_user, params)
     return respond_normal if !policy.respond_to?(action)
     return respond_unauthorized if !policy.public_send(action)
 
@@ -24,12 +22,16 @@ class UserAuthorizationMiddleware
   private
 
   def current_user
-    @request.env['warden'].user # current_user
+    @request.env['warden'].user(:user) # current_user
+    # @request.env['warden'].user(:admin_user) # current_admin_user
   end
 
-  def action_info
+  def setup_params
+    # merge path parameters and query parameters
+    # @request.params only contains query params ?param1=value1
+    # we can get path params at @route which is initialized at action_info method
     route = Rails.application.routes.recognize_path(@request.path, method: @request.request_method)
-    [route[:controller], "#{route[:action]}?"]
+    route.merge(@request.params)
   end
 
   def respond_normal
