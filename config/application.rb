@@ -24,7 +24,7 @@ module Middleware
 
     # devise middleware
     config.middleware.insert_after Warden::Manager, UserAuthorizationMiddleware
-    config.middleware.use GraphqlAuthorizationMiddleware
     config.middleware.insert_after UserAuthorizationMiddleware, ActiveAdminAuthorizationMiddleware
+    config.middleware.insert_after ActiveAdminAuthorizationMiddleware, GraphqlAuthorizationMiddleware
   end
 end
