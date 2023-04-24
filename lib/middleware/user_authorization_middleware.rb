@@ -5,6 +5,9 @@ class UserAuthorizationMiddleware
 
   def call(env)
     @request = ActionDispatch::Request.new(env)
+    return respond_normal if @request.path.start_with?("/admin") # skip admin routes
+    return respond_normal if @request.path.start_with?("/graphql") # skip graphql routes
+
     params = setup_params
     controller = params[:controller]
     action = "#{params[:action]}?"
