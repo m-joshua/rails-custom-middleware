@@ -14,7 +14,7 @@ class UserAuthorizationMiddleware
     policy = "#{controller.camelize}Policy"
     return respond_normal if !Object.const_defined?(policy)
 
-    policy = policy.constantize.new(current_user, nil)
+    policy = policy.constantize.new(current_user, @request.params)
     return respond_normal if !policy.respond_to?(action)
     return respond_unauthorized if !policy.public_send(action)
 
