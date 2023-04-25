@@ -7,4 +7,8 @@ class GraphqlPolicy < ApplicationPolicy
 
     post.user_id == @user.id
   end
+
+  def get_posts?
+    false
+  end
 end
