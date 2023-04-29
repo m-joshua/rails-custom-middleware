@@ -14,6 +14,10 @@ class GraphqlAuthorizationMiddleware
     return respond_unauthorized if !policy.public_send(operation_name)
 
     respond_normal
+  rescue => e
+    Rails.backtrace_cleaner.remove_silencers!
+    Rails.backtrace_cleaner.add_silencer { |line| line =~ /graphql_authorization_middleware/ }
+    raise e
   end
 
   private

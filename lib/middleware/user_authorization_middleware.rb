@@ -20,6 +20,10 @@ class UserAuthorizationMiddleware
     return respond_unauthorized if !policy.public_send(action)
 
     respond_normal
+  rescue => e
+    Rails.backtrace_cleaner.remove_silencers!
+    Rails.backtrace_cleaner.add_silencer { |line| line =~ /user_authorization_middleware/ }
+    raise e
   end
 
   private
